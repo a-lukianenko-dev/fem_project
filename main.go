@@ -21,13 +21,15 @@ func main() {
 
 	app.Logger.Print("Hello from the app!")
 
-	http.HandleFunc("/health", HandleHealth)
+	handler := http.NewServeMux()
+	handler.HandleFunc("/health", HandleHealth)
 
 	server := &http.Server{
 		Addr:         ":3000",
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  time.Second * 10,
 		WriteTimeout: time.Second * 30,
+		Handler:      handler,
 	}
 
 	err = server.ListenAndServe()
