@@ -1,16 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/a-lukianenko-dev/fem_project/internal/app"
+	"github.com/a-lukianenko-dev/fem_project/internal/routes"
 )
-
-func HandleHealth(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Status is available\n")
-}
 
 func main() {
 	app, err := app.NewApplication()
@@ -21,8 +17,7 @@ func main() {
 
 	app.Logger.Print("Hello from the app!")
 
-	handler := http.NewServeMux()
-	handler.HandleFunc("/health", HandleHealth)
+	handler := routes.SetupRoutesHandler(app)
 
 	server := &http.Server{
 		Addr:         ":3000",
@@ -32,9 +27,6 @@ func main() {
 		Handler:      handler,
 	}
 
-	err = server.ListenAndServe()
+	app.Logger.Fatal(server.ListenAndServe())
 
-	if err != nil {
-		app.Logger.Fatal(err)
-	}
 }
