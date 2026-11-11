@@ -1,6 +1,16 @@
 package main
 
-import "github.com/a-lukianenko-dev/fem_project/internal/app"
+import (
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/a-lukianenko-dev/fem_project/internal/app"
+)
+
+func HandleHealth(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "Status is available\n")
+}
 
 func main() {
 	app, err := app.NewApplication()
@@ -10,4 +20,19 @@ func main() {
 	}
 
 	app.Logger.Print("Hello from the app!")
+
+	http.HandleFunc("/health", HandleHealth)
+
+	server := &http.Server{
+		Addr:         ":3000",
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  time.Second * 10,
+		WriteTimeout: time.Second * 30,
+	}
+
+	err = server.ListenAndServe()
+
+	if err != nil {
+		app.Logger.Fatal(err)
+	}
 }
