@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -9,6 +11,9 @@ import (
 )
 
 func main() {
+	port := flag.Int("port", 3000, "server port")
+	flag.Parse()
+
 	app, err := app.NewApplication()
 
 	if err != nil {
@@ -20,7 +25,7 @@ func main() {
 	handler := routes.SetupRoutesHandler(app)
 
 	server := &http.Server{
-		Addr:         ":3000",
+		Addr:         fmt.Sprintf(":%d", *port),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  time.Second * 10,
 		WriteTimeout: time.Second * 30,
