@@ -20,6 +20,8 @@ func main() {
 		panic(err)
 	}
 
+	defer app.DB.Close()
+
 	app.Logger.Print("Hello from the app!")
 
 	handler := routes.SetupRoutesHandler(app)
