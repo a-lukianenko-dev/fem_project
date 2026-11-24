@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/a-lukianenko-dev/fem_project/internal/api"
+	"github.com/a-lukianenko-dev/fem_project/internal/migrations"
 	"github.com/a-lukianenko-dev/fem_project/internal/store"
 )
 
@@ -19,6 +20,11 @@ type Application struct {
 
 func NewApplication() (*Application, error) {
 	db, err := store.Open()
+	if err != nil {
+		return nil, err
+	}
+
+	err = store.Migrate(migrations.FS, db)
 	if err != nil {
 		return nil, err
 	}

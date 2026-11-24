@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS workout_entries (
   ),
   CONSTRAINT workout_entry_weight_non_negative CHECK (
     weight IS NULL OR weight >= 0
-  ),
+  )
 )
 -- +goose StatementEnd
 
